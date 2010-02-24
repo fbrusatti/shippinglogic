@@ -5,6 +5,27 @@ module Shippinglogic
     class TimeInTransit < Service
       include Attributes
 
+      attribute :customer_context,          :string,      :default => "TNT_D Origin Country Code"
+      attribute :xpci_version,              :string,      :default => "1.0002"
+
+      # Transit From
+	    attribute :political_division_2,      :string,      :default => 'Victoria'
+      attribute :political_division_1,      :string,      :default => 'BC'
+      attribute :country_code,              :string,      :default => 'CA'
+      attribute :post_code_primary_low,     :string,      :default => 'V8T4H2'
+
+      # Transit To
+	    attribute :political_division_2,      :string,      :default => 'Toronto'
+      attribute :political_division_1,      :string,      :default => 'ON'
+      attribute :country_code,              :string,      :default => 'CA'
+      attribute :post_code_primary_low,     :string,      :default => 'M5V2T6'
+
+      #
+      attribute :weight,                    :string,      :default => 30
+
+      #
+      attribute :pickup_date,               :string,      :default => Date.today.strftime('%Y%m%d')
+
       private
         def target
           @target ||= parse_response(request(build_request))
@@ -17,27 +38,27 @@ module Shippinglogic
           b.TimeInTransitRequest do
             b.Request do
               b.TransactionReference do
-                b.CustomerContext "TNT_D Origin Country Code"
-                b.XpciVersion "1.0002"
+                b.CustomerContext customer_context
+                b.XpciVersion xpci_version
               end
               b.RequestAction "TimeInTransit"	  	  
             end
 
 	        	b.TransitFrom do
 	        	  b.AddressArtifactFormat do
-	        	    b.PoticalDivision2 'Victoria'
-	        	    b.PoticalDivision1 'BC'
-	        	    b.CountryCode 'CA'
-	        	    b.PostcodePrimaryLow 'V8T4H2'
+	        	    b.PoticalDivision2 political_division_2
+	        	    b.PoticalDivision1 political_division_1
+	        	    b.CountryCode country_code
+	        	    b.PostcodePrimaryLow post_code_primary_low
 	        	  end
 	        	end
 
             b.TransitTo do
               b.AddressArtifactFormat do
-                b.PoliticalDivision2 'Toronto'
-                b.PoliticalDivision1 'ON'
-                b.CountryCode 'CA'
-                b.PostcodePrimaryLow 'M5V2T6'
+                b.PoliticalDivision2 political_division_2
+                b.PoliticalDivision1 political_division_1
+                b.CountryCode country_code
+                b.PostcodePrimaryLow post_code_primary_low
               end
             end
 
@@ -46,7 +67,7 @@ module Shippinglogic
                 b.Code "LBS"
                 b.Description "Pounds"
               end
-              b.Weight "30"
+              b.Weight weight
             end
 
             b.InvoiceLineTotal do
@@ -54,15 +75,15 @@ module Shippinglogic
               b.MonetaryValue "250.00"
             end
 
-            b.PickupDate '20100226'
+            b.PickupDate pickup_date
             b.DocumentsOnlyIndicator
           end
         end
 
         def parse_response(response)
-          puts "Response ----------------------"
+          puts 'Response ----------------------------'
           puts response
-          puts "#################################"
+          puts '######################################'
         end
 
     end
