@@ -4,6 +4,10 @@ module Shippinglogic
       private
         # Convenience method for sending requests to FedEx
         def request(body)
+
+puts "sending to #{base.options[:test] ? base.options[:test_url] : base.options[:production_url]}"
+puts body
+puts "--------------------------------------------------------------------------"
           real_class.post(base.options[:test] ? base.options[:test_url] : base.options[:production_url], :body => body)
         end
 
@@ -20,7 +24,7 @@ module Shippinglogic
         # A convenience method for building the authentication block in your XML request
         def build_authentication(b)
           b.AccessRequest do
-            b.AccessLicenseNumber base.api_key
+            b.AccessLicenseNumber base.key
             b.UserId base.account
             b.Password base.password
           end

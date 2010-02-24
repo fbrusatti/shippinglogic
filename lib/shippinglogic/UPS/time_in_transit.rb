@@ -2,7 +2,7 @@ require "shippinglogic/UPS/attributes"
 
 module Shippinglogic
   class UPS
-    class Track
+    class TimeInTransit < Service
       include Attributes
 
       private
@@ -11,8 +11,9 @@ module Shippinglogic
         end
 
         def build_request
-          b = build
-
+          b = builder
+          build_authentication(b)
+          b.instruct!
           b.TimeInTransitRequest do
             b.Request do
               b.TransactionReference do
@@ -26,8 +27,8 @@ module Shippinglogic
 	        	  b.AddressArtifactFormat do
 	        	    b.PoticalDivision2 'Victoria'
 	        	    b.PoticalDivision1 'BC'
-	        	    b.CountryCode 'V8T4H2'
-	        	    b.PostcodePrimaryLow 'CA'
+	        	    b.CountryCode 'CA'
+	        	    b.PostcodePrimaryLow 'V8T4H2'
 	        	  end
 	        	end
 
@@ -35,8 +36,8 @@ module Shippinglogic
               b.AddressArtifactFormat do
                 b.PoliticalDivision2 'Toronto'
                 b.PoliticalDivision1 'ON'
-                b.CountryCode 'M5V2T6'
-                b.PostcodePrimaryLow 'CA'
+                b.CountryCode 'CA'
+                b.PostcodePrimaryLow 'M5V2T6'
               end
             end
 
@@ -53,13 +54,15 @@ module Shippinglogic
               b.MonetaryValue "250.00"
             end
 
-            b.PickupDate 'February 24'
+            b.PickupDate '20100226'
             b.DocumentsOnlyIndicator
           end
         end
 
         def parse_response(response)
+          puts "Response ----------------------"
           puts response
+          puts "#################################"
         end
 
     end

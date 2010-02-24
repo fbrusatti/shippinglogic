@@ -1,3 +1,7 @@
+require "shippinglogic/UPS/proxy"
+require "shippinglogic/UPS/service"
+require "shippinglogic/UPS/time_in_transit"
+
 module Shippinglogic
   class UPS
     # A hash representing default the options. If you are using this in a Rails app the best place
@@ -16,8 +20,9 @@ module Shippinglogic
       @options ||= {
         :test => defined?(Rails) && !Rails.env.production?,
         # ToDo: maybe the production URL is different
-        :production_url => "https://wwwcie.ups.com/ups.app/xml",
-        :test_url => "https://wwwcie.ups.com/webservices"
+        :production_url => "https://wwwcie.ups.com/ups.app/xml/TimeInTransit",
+        :test_url => "https://wwwcie.ups.com/ups.app/xml/TimeInTransit"
+#        :test_url => "https://wwwcie.ups.com/webservices"
       }
     end
   
@@ -32,7 +37,7 @@ module Shippinglogic
     # The last parameter allows you to modify the class options on an instance level. It accepts the
     # same options that the class level method #options accepts. If you don't want to change any of
     # them, don't supply this parameter.
-    def initialize(key, password, account, meter, options = {})
+    def initialize(key, password, account, options = {})
       self.key = key
       self.password = password
       self.account = account

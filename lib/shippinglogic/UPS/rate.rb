@@ -12,6 +12,7 @@ module Shippinglogic
 
         def build_request
           b = build
+          build_authentication(b)
         end
     end
   end
