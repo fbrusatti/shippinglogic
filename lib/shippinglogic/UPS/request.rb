@@ -5,6 +5,7 @@ module Shippinglogic
         # Convenience method for sending requests to FedEx
         def request(body)
           puts "sending to #{base.options[:test] ? base.options[:test_url] : base.options[:production_url]}"
+          puts "Clase??? I need TimeOnTransit and Track #{real_class.class.to_s}"
           puts body
           puts "--------------------------------------------------------------------------"
           real_class.post(base.options[:test] ? base.options[:test_url] : base.options[:production_url], :body => body).body

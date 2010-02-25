@@ -20,11 +20,11 @@ module Shippinglogic
       attribute :to_country_code,               :string,      :default => 'CA'
       attribute :to_post_code_primary_low,      :string,      :default => 'M5V2T6'
 
-      attribute :weight,                        :string,      :default => 30
-      attribute :currency_code                  :string,      :default => 'USD'
-      attribute :monetary_value                 :string,      :default => '250.00'
-      attribute :unit_of_measurement_code       :string,      :default => 'LBS'
-      attribute :unit_of_measurement_desc       :string,      :default => 'Pounds'
+      attribute :weight,                        :string,      :default => '30'
+      attribute :currency_code,                 :string,      :default => 'USD'
+      attribute :monetary_value,                :string,      :default => '250.00'
+      attribute :unit_of_measurement_code,      :string,      :default => 'LBS'
+      attribute :unit_of_measurement_desc,      :string,      :default => 'Pounds'
 
       attribute :pickup_date,                   :string,      :default => Date.today.strftime('%Y%m%d')
 
@@ -83,11 +83,11 @@ module Shippinglogic
         end
 
         # Returns an array of hash like the following one...
-        # [{:total_days=>"1", :date=>"2010-02-26", :service_code=>"23", :label=>"UPS Express Plus"},
-        #  {:total_days=>"1", :date=>"2010-02-26", :service_code=>"24", :label=>"UPS Express"},
-        #  {:total_days=>"1", :date=>"2010-02-26", :service_code=>"20", :label=>"UPS Express Saver"},
-        #  {:total_days=>"1", :date=>"2010-02-26", :service_code=>"19", :label=>"UPS Expedited"},
-        #  {:total_days=>"1", :date=>"2010-02-26", :service_code=>"25", :label=>"UPS Standard"}]
+        # [ {:total_days=>"1", :date=>"2010-02-26", :service_code=>"23", :label=>"UPS Express Plus"},
+        #   {:total_days=>"1", :date=>"2010-02-26", :service_code=>"24", :label=>"UPS Express"},
+        #   {:total_days=>"1", :date=>"2010-02-26", :service_code=>"20", :label=>"UPS Express Saver"},
+        #   {:total_days=>"1", :date=>"2010-02-26", :service_code=>"19", :label=>"UPS Expedited"},
+        #   {:total_days=>"1", :date=>"2010-02-26", :service_code=>"25", :label=>"UPS Standard"}]
         def parse_response(response)
           a = Array.new
           Hpricot(response).search('//servicesummary').collect do |tag|

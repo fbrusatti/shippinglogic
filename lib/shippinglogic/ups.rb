@@ -1,6 +1,7 @@
 require "shippinglogic/UPS/proxy"
 require "shippinglogic/UPS/service"
 require "shippinglogic/UPS/time_in_transit"
+require "shippinglogic/UPS/track"
 
 module Shippinglogic
   class UPS
@@ -21,7 +22,8 @@ module Shippinglogic
         :test => defined?(Rails) && !Rails.env.production?,
         # ToDo: maybe the production URL is different
         :production_url => "https://wwwcie.ups.com/ups.app/xml/TimeInTransit",
-        :test_url => "https://wwwcie.ups.com/ups.app/xml/TimeInTransit"
+        :test_url => "https://wwwcie.ups.com/ups.app/xml/Track"
+#        :test_url => "https://wwwcie.ups.com/ups.app/xml/TimeInTransit"
 #        :test_url => "https://wwwcie.ups.com/webservices"
       }
     end
@@ -64,8 +66,8 @@ module Shippinglogic
         @time_in_transit ||= TimeInTransit.new(self, attributes)
       end
 
-#    def track(attributes = {})
-#      @track ||= Track.new(self, attributes)
-#    end
+    def track(attributes = {})
+      @track ||= Track.new(self, attributes)
+    end
   end
 end
