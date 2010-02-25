@@ -1,3 +1,4 @@
+require 'hpricot'
 require "shippinglogic/UPS/attributes"
 require "shippinglogic/UPS/request"
 

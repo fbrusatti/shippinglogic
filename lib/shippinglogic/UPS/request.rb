@@ -7,7 +7,7 @@ module Shippinglogic
           puts "sending to #{base.options[:test] ? base.options[:test_url] : base.options[:production_url]}"
           puts body
           puts "--------------------------------------------------------------------------"
-          real_class.post(base.options[:test] ? base.options[:test_url] : base.options[:production_url], :body => body)
+          real_class.post(base.options[:test] ? base.options[:test_url] : base.options[:production_url], :body => body).body
         end
 
         # Convenience method to create a builder object so that our builder options are consistent across
