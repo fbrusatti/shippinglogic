@@ -6,6 +6,18 @@ module Shippinglogic
       include Attributes
 
       attribute :weight,              :integer,      :default => 5
+  
+      # Shipper Attributes
+	    attribute :shipper_city,          :string,      :default => 'Victoria'
+      attribute :shipper_state,         :string,      :default => 'BC'
+      attribute :shipper_zip,           :string,      :default => 'V8T4H2'
+      attribute :shipper_country_code,  :string,      :default => 'CA'
+
+      # Ship To Attributes
+	    attribute :ship_to_city,          :string,      :default => 'New York'
+      attribute :ship_to_state,         :string,      :default => 'NY'
+      attribute :ship_to_zip,           :string,      :default => '10003'
+      attribute :ship_to_country_code,  :string,      :default => 'US'
 
       private
         def target
@@ -24,7 +36,6 @@ module Shippinglogic
                 b.XpciVersion '1.0001'
               end
               b.RequestAction 'Rate'
-#              b.RequestOption 'shop' if compare
             end
             b.PickupType do
               b.Code '01'
@@ -33,18 +44,18 @@ module Shippinglogic
             b.Shipment do
               b.Shipper do
                 b.Address do
-                  b.City 'Victoria'
-                  b.StateProvinceCode 'BC'
-                  b.PostalCode 'V8T4H2'
-                  b.CountryCode 'CA'
+                  b.City shipper_city
+                  b.StateProvinceCode shipper_state
+                  b.PostalCode shipper_zip
+                  b.CountryCode shipper_country_code
                 end
               end
               b.ShipTo do
                 b.Address do
-                  b.PostalCode '10003'
-                  b.CountryCode 'US'
-                  b.City 'NY'
-                  b.StateProvinceCode 'NY'
+                  b.PostalCode ship_to_zip
+                  b.CountryCode ship_to_country_code
+                  b.City ship_to_city
+                  b.StateProvinceCode ship_to_state
                 end
               end
               b.Service do
