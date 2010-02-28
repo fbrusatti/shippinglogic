@@ -4,6 +4,9 @@ module Shippinglogic
   class UPS
     class Track < Service
 
+      attribute :tracking_number,              :string,      :default => "1Z99EY166800069867"
+
+
       private
         def target
           @target ||= parse_response(request(build_request))          
@@ -25,7 +28,7 @@ module Shippinglogic
               b.RequestAction "Track"
               b.RequestOption "activity"
             end
-            b.TrackingNumber "1Z99EY166800069867"
+            b.TrackingNumber tracking_number
           end
         end
 
@@ -58,10 +61,19 @@ module Shippinglogic
 
             h = { :location => address, :status => status, :date => date }
 
-            puts h
-
             a << h
           end
+
+#          puts  response.at('trackresponse')
+#          shipper = {
+#            :address_line => response.at('shipment/shipper/shippernumber/address/addressline1').inner_html,
+#            :city => response.at('shipment/shipper/shippernumber/address/city').inner_html,
+#            :state_province_code => response.at('shipment/shipper/shippernumber/address/stateprovincecode').inner_html,
+#            :postal_code => response.at('shipment/shipper/shippernumber/address/postalcode').inner_html,
+#            :country_code => response.at('shipment/shipper/shippernumber/address/countrycode').inner_html
+#          }
+#          a << shipper
+          puts a
           a
         end
 

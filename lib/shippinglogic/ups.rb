@@ -1,5 +1,6 @@
 require "shippinglogic/UPS/proxy"
 require "shippinglogic/UPS/service"
+require "shippinglogic/UPS/rate"
 require "shippinglogic/UPS/time_in_transit"
 require "shippinglogic/UPS/track"
 
@@ -21,9 +22,8 @@ module Shippinglogic
       @options ||= {
         :test => defined?(Rails) && !Rails.env.production?,
         # ToDo: maybe the production URL is different
-        :production_url => "https://wwwcie.ups.com/ups.app/xml/TimeInTransit",
-        :test_url => "https://wwwcie.ups.com/ups.app/xml/Track"
-#        :test_url => "https://wwwcie.ups.com/ups.app/xml/TimeInTransit"
+        :production_url => "https://wwwcie.ups.com/ups.app/xml",
+        :test_url => "https://wwwcie.ups.com/ups.app/xml"
 #        :test_url => "https://wwwcie.ups.com/webservices"
       }
     end
@@ -46,25 +46,18 @@ module Shippinglogic
       self.options = self.class.options.merge(options)
     end
     
-#    def cancel(attributes = {})
-#      @cancel ||= Cancel.new(self, attributes)
-#    end
-    
+
     def rate(attributes = {})
       @rate ||= Rate.new(self, attributes)
     end
     
-#    def ship(attributes = {})
-#      @ship ||= Ship.new(self, attributes)
-#    end
+    def ship(attributes = {})
+      @ship ||= Ship.new(self, attributes)
+    end
     
-#    def signature(attributes = {})
-#      @signature ||= Signature.new(self, attributes)
-#    end
-    
-      def time_in_transit(attributes = {})
-        @time_in_transit ||= TimeInTransit.new(self, attributes)
-      end
+    def time_in_transit(attributes = {})
+      @time_in_transit ||= TimeInTransit.new(self, attributes)
+    end
 
     def track(attributes = {})
       @track ||= Track.new(self, attributes)
