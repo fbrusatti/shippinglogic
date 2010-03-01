@@ -5,28 +5,28 @@ module Shippinglogic
     class TimeInTransit < Service
       include Attributes
 
-      attribute :customer_context,              :string,      :default => "TNT_D Origin Country Code"
-      attribute :xpci_version,                  :string,      :default => "1.0002"
+      attribute :customer_context,              :string,  :default => "TNT_D Origin Country Code"
+      attribute :xpci_version,                  :string,  :default => "1.0002"
 
       # Transit From
-	    attribute :from_political_division_2,     :string,      :default => 'Victoria'
-      attribute :from_political_division_1,     :string,      :default => 'BC'
-      attribute :from_country_code,             :string,      :default => 'CA'
-      attribute :from_post_code_primary_low,    :string,      :default => 'V8T4H2'
+	    attribute :from_political_division_2,     :string
+      attribute :from_political_division_1,     :string
+      attribute :from_country_code,             :string
+      attribute :from_post_code_primary_low,    :string
 
       # Transit To
-	    attribute :to_political_division_2,       :string,      :default => 'Toronto'
-      attribute :to_political_division_1,       :string,      :default => 'ON'
-      attribute :to_country_code,               :string,      :default => 'CA'
-      attribute :to_post_code_primary_low,      :string,      :default => 'M5V2T6'
+	    attribute :to_political_division_2,       :string
+      attribute :to_political_division_1,       :string
+      attribute :to_country_code,               :string
+      attribute :to_post_code_primary_low,      :string
 
-      attribute :weight,                        :string,      :default => '30'
-      attribute :currency_code,                 :string,      :default => 'USD'
-      attribute :monetary_value,                :string,      :default => '250.00'
-      attribute :unit_of_measurement_code,      :string,      :default => 'LBS'
-      attribute :unit_of_measurement_desc,      :string,      :default => 'Pounds'
+      attribute :weight,                        :string
+      attribute :currency_code,                 :string
+      attribute :monetary_value,                :string
+      attribute :unit_of_measurement_code,      :string,  :default => 'LBS'
+      attribute :unit_of_measurement_desc,      :string,  :default => 'Pounds'
 
-      attribute :pickup_date,                   :string,      :default => Date.today.strftime('%Y%m%d')
+      attribute :pickup_date,                   :string,  :default => Date.today.strftime('%Y%m%d')
 
       private
         def target
@@ -82,20 +82,22 @@ module Shippinglogic
           end
         end
 
-        # Returns an array of hash like the following one...
-        # [ {:total_days=>"1", :date=>"2010-02-26", :service_code=>"23", :label=>"UPS Express Plus"},
-        #   {:total_days=>"1", :date=>"2010-02-26", :service_code=>"24", :label=>"UPS Express"},
-        #   {:total_days=>"1", :date=>"2010-02-26", :service_code=>"20", :label=>"UPS Express Saver"},
-        #   {:total_days=>"1", :date=>"2010-02-26", :service_code=>"19", :label=>"UPS Expedited"},
-        #   {:total_days=>"1", :date=>"2010-02-26", :service_code=>"25", :label=>"UPS Standard"}]
+        # Returns an array of hashs like the following one...
+        #
+        #[ {:service_code=>"23", :date=>"2010-03-02", :total_days=>"1", :label=>"UPS Express Plus"},
+        #  {:service_code=>"24", :date=>"2010-03-02", :total_days=>"1", :label=>"UPS Express"},
+        #  {:service_code=>"20", :date=>"2010-03-02", :total_days=>"1", :label=>"UPS Express Saver"},
+        #  {:service_code=>"19", :date=>"2010-03-03", :total_days=>"2", :label=>"UPS Expedited"},
+        #  {:service_code=>"25", :date=>"2010-03-05", :total_days=>"4", :label=>"UPS Standard"}]
         def parse_response(response)
           a = Array.new
           Hpricot(response).search('//servicesummary').collect do |tag|
-	          h = Hash.new
-            h[:service_code] = tag.at("service/code").inner_html
-            h[:label] = tag.at('service/description').inner_html
-            h[:total_days] = tag.at('estimatedarrival/totaltransitdays').inner_html
-            h[:date] = tag.at('estimatedarrival/date').inner_html
+            h = {
+              :service_code => tag.at("service/code").inner_html,
+              :label => tag.at('service/description').inner_html,
+              :total_days => tag.at('estimatedarrival/totaltransitdays').inner_html,
+              :date => tag.at('estimatedarrival/date').inner_html
+            }
 
             a << h
           end

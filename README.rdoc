@@ -1,6 +1,6 @@
 = Shippinglogic
 
-The goal of this library is to provide simple and straight forward interfaces to the various shipping web services: FedEx, UPS, USPS, etc. (Only FedEx is supported at this time)
+The goal of this library is to provide simple and straight forward interfaces to the various shipping web services: FedEx, UPS, USPS, etc. (Only FedEx and UPS are supported at this time)
 
 == Helpful links
 

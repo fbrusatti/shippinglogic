@@ -5,19 +5,19 @@ module Shippinglogic
     class Rate < Service
       include Attributes
 
-      attribute :weight,              :integer,      :default => 5
+      attribute :weight,                :float,      :default => 5
   
       # Shipper Attributes
-	    attribute :shipper_city,          :string,      :default => 'Victoria'
-      attribute :shipper_state,         :string,      :default => 'BC'
-      attribute :shipper_zip,           :string,      :default => 'V8T4H2'
-      attribute :shipper_country_code,  :string,      :default => 'CA'
+	    attribute :shipper_city,          :string
+      attribute :shipper_state,         :string
+      attribute :shipper_zip,           :string
+      attribute :shipper_country_code,  :string
 
       # Ship To Attributes
-	    attribute :ship_to_city,          :string,      :default => 'New York'
-      attribute :ship_to_state,         :string,      :default => 'NY'
-      attribute :ship_to_zip,           :string,      :default => '10003'
-      attribute :ship_to_country_code,  :string,      :default => 'US'
+	    attribute :ship_to_city,          :string
+      attribute :ship_to_state,         :string
+      attribute :ship_to_zip,           :string
+      attribute :ship_to_country_code,  :string
 
       private
         def target
