@@ -77,13 +77,9 @@ module Shippinglogic
 
             b.Shipment do
               b.Shipper do
-                b.Address do
-                  b.City shipper_city
-                  b.StateProvinceCode shipper_state
-                  b.PostalCode shipper_postal_code
-                  b.CountryCode shipper_country
-                end
+                build_address(b, :shipper)
               end
+
               b.ShipTo do
                 b.Address do
                   b.PostalCode recipient_postal_code
@@ -92,10 +88,14 @@ module Shippinglogic
                   b.StateProvinceCode recipient_state
                 end
               end
-              b.Service do
-                b.Code '03'
+
+              if service_type
+                b.Service do
+                  b.Code service_type
+                end
               end
-              build_package(b, weight)
+
+              build_packages(b, weight)
             end
           end
         end
