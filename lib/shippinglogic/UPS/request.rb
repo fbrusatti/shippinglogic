@@ -4,7 +4,7 @@ module Shippinglogic
       private
         # Convenience method for sending requests to FedEx
         def request(body)
-          real_class.post(base.url + real_class.path, :body => body)
+          real_class.post(base.url + real_class.path, :body => body).body
         end
 
         # Convenience method to create a builder object so that our builder options are consistent across
@@ -67,15 +67,4 @@ module Shippinglogic
     end
   end
 end
-
-
-#                b.Address do
-#                  b.PostalCode recipient_postal_code
-#                  b.CountryCode recipient_country
-#                  b.City recipient_city
-#                  b.StateProvinceCode recipient_state
-#                end
-
-
-
 

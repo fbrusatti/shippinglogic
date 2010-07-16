@@ -102,23 +102,16 @@ module Shippinglogic
 
 
         def parse_response(response)
+          return [] if !Hpricot(response).search('//ratedshipment')
 
-
-puts "*************** Response is:"
-puts response.inspect
-puts response.class
-puts response[:rated_shipment]
-#          return [] if !response[:rated_shipment]
-#          
-#          response[:rated_shipment].collect do |details|
-#            service = Service.new
-#            service.name = Enumerations::SERVICE_TYPES[details[:service][:code]]
-#            service.type = service.name
-#            service.speed = (days = details[:guaranteed_days_to_delivery]) && (days.to_i * 86400)
-#            service.rate = BigDecimal.new(details[:total_charges][:monetary_value])
-#            service.currency = details[:total_charges][:currency_code]
-#            service
-#          end
+          Hpricot(response).search('//ratedshipment').collect do |details|
+            OpenStruct.new(
+              :service_code => details.at('service/code').inner_html,
+              :speed        => details.at('guaranteeddaystodelivery').inner_html,
+              :rate         => details.at('totalcharges/monetaryvalue').inner_html,
+              :currency     => details.at('totalcharges/currencycode').inner_html
+            )
+          end.sort_by(&:rate)
         end
 
     end
