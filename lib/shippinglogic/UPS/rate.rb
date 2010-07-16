@@ -2,6 +2,14 @@ require "shippinglogic/UPS/attributes"
 
 module Shippinglogic
   class UPS
+
+
+    # === Delivery options
+    #
+    # * <tt>service_type</tt> - one of SERVICE_TYPES, this is optional, leave this blank if you want a list of all available services. (default: nil)
+    # * <tt>delivery_deadline</tt> - whether or not to include estimated transit times. (default: true)
+    # * <tt>dropoff_type</tt> - one of DROP_OFF_TYPES. (default: REGULAR_PICKUP)
+
     class Rate < Service
       include Attributes
 
@@ -19,6 +27,11 @@ module Shippinglogic
       attribute :ship_to_zip,           :string
       attribute :ship_to_country_code,  :string
 
+      # delivery options
+      attribute :service_type,                :string
+      attribute :dropoff_type,                :string,      :default => "01"
+      attribute :saturday,                    :boolean,     :default => false
+
       private
         def target
           @target ||= parse_response(request(build_request))
@@ -30,15 +43,18 @@ module Shippinglogic
           b.instruct!
 
           b.RatingServiceSelectionRequest do
+
             b.Request do
               b.TransactionReference do
                 b.CustomerContext 'Rating and Service'
                 b.XpciVersion '1.0001'
               end
               b.RequestAction 'Rate'
+              b.RequestOption service_type ? "Rate" : "Shop"
             end
+
             b.PickupType do
-              b.Code '01'
+              b.Code dropoff_type
             end
 
             b.Shipment do
