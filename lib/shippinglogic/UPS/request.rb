@@ -4,17 +4,7 @@ module Shippinglogic
       private
         # Convenience method for sending requests to FedEx
         def request(body)
-
-          url = base.options[:test] ? base.options[:test_url] : base.options[:production_url]
-          url = url + "/#{real_class.to_s.split('::').last}"
-
-          puts "sending to #{url}"
-puts "Que mierda es base.url --> #{base.url}"
-puts "y todo junto? #{base.url + real_class.path}"
-          puts body
-          puts "--------------------------------------------------------------------------"
-
-          real_class.post(url, :body => body).body
+          real_class.post(base.url + real_class.path, :body => body)
         end
 
         # Convenience method to create a builder object so that our builder options are consistent across

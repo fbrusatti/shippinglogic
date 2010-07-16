@@ -2,8 +2,19 @@ require "shippinglogic/UPS/attributes"
 
 module Shippinglogic
   class UPS
-
-
+    # An interface to the rate services provided by UPS. Allows you to get an array of rates from UPS for a shipment,
+    # or a single rate for a specific service.
+    #
+    # == Options
+    # === Shipper options
+    #
+    # * <tt>shipper_name</tt> - name of the shipper.
+    # * <tt>shipper_streets</tt> - street part of the address, separate multiple streets with a new line, dont include blank lines.
+    # * <tt>shipper_city</tt> - city part of the address.
+    # * <tt>shipper_state_</tt> - state part of the address, use state abreviations.
+    # * <tt>shipper_postal_code</tt> - postal code part of the address. Ex: zip for the US.
+    # * <tt>shipper_country</tt> - country code part of the address. UPS expects abbreviations, but Shippinglogic will convert full names to abbreviations for you.
+    #
     # === Delivery options
     #
     # * <tt>service_type</tt> - one of SERVICE_TYPES, this is optional, leave this blank if you want a list of all available services. (default: nil)
@@ -16,27 +27,28 @@ module Shippinglogic
         "/Rate"
       end
 
-
       include Attributes
 
       attribute :weight,                :float,      :default => 5
   
       # Shipper Attributes
-	    attribute :shipper_city,          :string
+      attribute :shipper_name,          :string
+      attribute :shipper_streets,       :string
+      attribute :shipper_city,          :string
       attribute :shipper_state,         :string
-      attribute :shipper_zip,           :string
-      attribute :shipper_country_code,  :string
+      attribute :shipper_postal_code,   :string
+      attribute :shipper_country,       :string,      :modifier => :country_code
 
       # Ship To Attributes
-	    attribute :ship_to_city,          :string
-      attribute :ship_to_state,         :string
-      attribute :ship_to_zip,           :string
-      attribute :ship_to_country_code,  :string
+	    attribute :recipient_city,          :string
+      attribute :recipient_state,         :string
+      attribute :recipient_postal_code,   :string
+      attribute :recipient_country,       :string,      :modifier => :country_code
 
       # delivery options
-      attribute :service_type,                :string
-      attribute :dropoff_type,                :string,      :default => "01"
-      attribute :saturday,                    :boolean,     :default => false
+      attribute :service_type,          :string
+      attribute :dropoff_type,          :string,      :default => "01"
+      attribute :saturday,              :boolean,     :default => false
 
       private
         def target
@@ -68,16 +80,16 @@ module Shippinglogic
                 b.Address do
                   b.City shipper_city
                   b.StateProvinceCode shipper_state
-                  b.PostalCode shipper_zip
-                  b.CountryCode shipper_country_code
+                  b.PostalCode shipper_postal_code
+                  b.CountryCode shipper_country
                 end
               end
               b.ShipTo do
                 b.Address do
-                  b.PostalCode ship_to_zip
-                  b.CountryCode ship_to_country_code
-                  b.City ship_to_city
-                  b.StateProvinceCode ship_to_state
+                  b.PostalCode recipient_postal_code
+                  b.CountryCode recipient_country
+                  b.City recipient_city
+                  b.StateProvinceCode recipient_state
                 end
               end
               b.Service do
@@ -90,8 +102,12 @@ module Shippinglogic
 
 
         def parse_response(response)
+
+
 puts "*************** Response is:"
 puts response.inspect
+puts response.class
+puts response[:rated_shipment]
 #          return [] if !response[:rated_shipment]
 #          
 #          response[:rated_shipment].collect do |details|

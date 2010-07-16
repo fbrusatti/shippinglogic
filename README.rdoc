@@ -15,16 +15,6 @@ If you find a bug or a problem please post it in the issues section. If you need
 
 == Install & use
 
-Install the gem from rubyforge:
-
-  sudo gem install shippinglogic
-
-Or from github:
-
-  sudo gem install binarylogic-shippinglogic
-
-Now just include it in your project and you are ready to go.
-
 You can also install this as a plugin:
 
   script/plugin install git://github.com/binarylogic/shippinglogic.git
@@ -94,7 +84,7 @@ You will notice above we assign the result of the 'track' method to a variable c
 
 == Available services and their features
 
-This library is still very new, as a result only FedEx is supported at this time. More will come.
+This library is still very new, as a result only FedEx is supported at this time. More will come. Now it have a very basic UPS support
 
 I spent a lot of time on the documentation, for examples of how to use each service please see the docs for their respective classes.
 
