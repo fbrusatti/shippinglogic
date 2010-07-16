@@ -21,11 +21,14 @@ module Shippinglogic
     def self.options
       @options ||= {
         :test => defined?(Rails) && !Rails.env.production?,
-        # ToDo: maybe the production URL is different
-        :production_url => "https://wwwcie.ups.com/ups.app/xml",
-        :test_url => "https://wwwcie.ups.com/ups.app/xml"
-#        :test_url => "https://wwwcie.ups.com/webservices"
+        :production_url => "https://www.ups.com:443/ups.app/xml",
+        :test_url => "https://wwwcie.ups.com:443/ups.app/xml"
       }
+    end
+
+    # A convenience method for accessing the endpoint URL for the UPS API.
+    def url
+      options[:test] ? options[:test_url] : options[:production_url]
     end
   
     attr_accessor :key, :password, :account, :options
@@ -45,7 +48,6 @@ module Shippinglogic
       self.account = account
       self.options = self.class.options.merge(options)
     end
-    
 
     def rate(attributes = {})
       @rate ||= Rate.new(self, attributes)

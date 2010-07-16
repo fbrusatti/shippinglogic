@@ -11,6 +11,12 @@ module Shippinglogic
     # * <tt>dropoff_type</tt> - one of DROP_OFF_TYPES. (default: REGULAR_PICKUP)
 
     class Rate < Service
+      # Useful to complete url request
+      def self.path
+        "/Rate"
+      end
+
+
       include Attributes
 
       attribute :weight,                :float,      :default => 5
@@ -84,8 +90,19 @@ module Shippinglogic
 
 
         def parse_response(response)
-          puts "Response ----------------------------------------------"
-          puts response
+puts "*************** Response is:"
+puts response.inspect
+#          return [] if !response[:rated_shipment]
+#          
+#          response[:rated_shipment].collect do |details|
+#            service = Service.new
+#            service.name = Enumerations::SERVICE_TYPES[details[:service][:code]]
+#            service.type = service.name
+#            service.speed = (days = details[:guaranteed_days_to_delivery]) && (days.to_i * 86400)
+#            service.rate = BigDecimal.new(details[:total_charges][:monetary_value])
+#            service.currency = details[:total_charges][:currency_code]
+#            service
+#          end
         end
 
     end
