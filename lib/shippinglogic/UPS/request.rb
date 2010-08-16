@@ -43,6 +43,12 @@ module Shippinglogic
                   xml.UnitOfMeasurement do
                     xml.Code "LBS"
                 end
+#                            <PackageServiceOptions>
+#                                <InsuredValue>
+#                                    <CurrencyCode>USD</CurrencyCode>
+#                                    <MonetaryValue>$insured_value</MonetaryValue>
+#                                </InsuredValue>
+#                            </PackageServiceOptions>
               end
             end
           end

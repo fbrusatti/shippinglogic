@@ -29,7 +29,7 @@ module Shippinglogic
 
       include Attributes
 
-      attribute :weight,                :float,      :default => 5
+      attribute :weight,                :float,       :default => 5
   
       # Shipper Attributes
       attribute :shipper_name,          :string
@@ -43,7 +43,11 @@ module Shippinglogic
 	    attribute :recipient_city,          :string
       attribute :recipient_state,         :string
       attribute :recipient_postal_code,   :string
-      attribute :recipient_country,       :string,      :modifier => :country_code
+      attribute :recipient_country,       :string,    :modifier => :country_code
+
+      # monetary options
+      attribute :currency_type,           :string
+
 
       # delivery options
       attribute :service_type,          :string

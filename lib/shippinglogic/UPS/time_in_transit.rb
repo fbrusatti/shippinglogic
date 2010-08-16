@@ -3,6 +3,12 @@ require "shippinglogic/UPS/attributes"
 module Shippinglogic
   class UPS
     class TimeInTransit < Service
+
+      # Useful to complete url request
+      def self.path
+        "/TimeInTransit"
+      end
+
       include Attributes
 
       attribute :customer_context,              :string,  :default => "TNT_D Origin Country Code"
@@ -30,6 +36,10 @@ module Shippinglogic
 
       private
         def target
+puts 'TARGET'
+puts '-------------------------------------------------------------------------'
+puts build_request
+puts '-------------------------------------------------------------------------'
           @target ||= parse_response(request(build_request))
         end
 
@@ -82,26 +92,17 @@ module Shippinglogic
           end
         end
 
-        # Returns an array of hashs like the following one...
-        #
-        #[ {:service_code=>"23", :date=>"2010-03-02", :total_days=>"1", :label=>"UPS Express Plus"},
-        #  {:service_code=>"24", :date=>"2010-03-02", :total_days=>"1", :label=>"UPS Express"},
-        #  {:service_code=>"20", :date=>"2010-03-02", :total_days=>"1", :label=>"UPS Express Saver"},
-        #  {:service_code=>"19", :date=>"2010-03-03", :total_days=>"2", :label=>"UPS Expedited"},
-        #  {:service_code=>"25", :date=>"2010-03-05", :total_days=>"4", :label=>"UPS Standard"}]
         def parse_response(response)
-          a = Array.new
           Hpricot(response).search('//servicesummary').collect do |tag|
-            h = {
+            OpenStruct.new(
               :service_code => tag.at("service/code").inner_html,
               :label => tag.at('service/description').inner_html,
               :total_days => tag.at('estimatedarrival/totaltransitdays').inner_html,
-              :date => tag.at('estimatedarrival/date').inner_html
-            }
+              :date => tag.at('estimatedarrival/date').inner_html,
+              :day_of_week => tag.at('estimatedarrival/dayofweek').inner_html
+            )
 
-            a << h
-          end
-          a
+          end.sort_by(&:service_code)
         end
 
     end
