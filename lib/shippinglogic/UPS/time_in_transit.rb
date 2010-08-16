@@ -36,10 +36,6 @@ module Shippinglogic
 
       private
         def target
-puts 'TARGET'
-puts '-------------------------------------------------------------------------'
-puts build_request
-puts '-------------------------------------------------------------------------'
           @target ||= parse_response(request(build_request))
         end
 
